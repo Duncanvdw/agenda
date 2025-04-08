@@ -1,10 +1,35 @@
 const monthYearElement = document.getElementById('month-year');
 const datesElement = document.getElementById('data');
-const prevBtn = document.getElementById('prev-button'); // Changed to getElementById
-const nextBtn = document.getElementById('next-button'); // Changed to getElementById
+const prevBtn = document.getElementById('prev-button');
+const nextBtn = document.getElementById('next-button');
+const reserveButton = document.querySelector('.button');
 
 let currentDate = new Date();
 let unavailableDates = []; // Array to store unavailable dates
+
+// Fetch unavailable dates from the backend
+const fetchUnavailableDates = async () => {
+    try {
+        const response = await fetch('http://localhost:3000/unavailableDates');
+        unavailableDates = await response.json();
+        updateCalander();
+    } catch (error) {
+        console.error('Error fetching unavailable dates:', error);
+    }
+};
+
+// Save a new unavailable date to the backend
+const saveUnavailableDate = async (date) => {
+    try {
+        await fetch('http://localhost:3000/unavailableDates', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(date),
+        });
+    } catch (error) {
+        console.error('Error saving unavailable date:', error);
+    }
+};
 
 const updateCalander = () => {
     const currentYear = currentDate.getFullYear();
@@ -66,8 +91,7 @@ const updateCalander = () => {
 };
 
 // Add event listener to the "Reserveer!" button
-const reserveButton = document.querySelector('.button');
-reserveButton.addEventListener('click', () => {
+reserveButton.addEventListener('click', async () => {
     const selectedDateElement = document.querySelector('.date.selected');
     if (!selectedDateElement) {
         alert('Please select a date before reserving!');
@@ -77,6 +101,7 @@ reserveButton.addEventListener('click', () => {
     const selectedDate = selectedDateElement.getAttribute('data-date').split('T')[0];
     if (!unavailableDates.includes(selectedDate)) {
         unavailableDates.push(selectedDate); // Add the selected date to the unavailable dates list
+        await saveUnavailableDate(selectedDate); // Save the date to the backend
         alert(`Date ${new Date(selectedDate).toDateString()} has been reserved!`);
         updateCalander(); // Re-render the calendar to reflect the unavailable date
     } else {
@@ -94,4 +119,5 @@ nextBtn.addEventListener('click', () => {
     updateCalander();
 });
 
-updateCalander();
+// Fetch unavailable dates on page load
+fetchUnavailableDates();
