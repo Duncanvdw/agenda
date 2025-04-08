@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Agenda test</title>
+</head>
+<body>
+    <h1>Agenda test</h1>
+
+    <div class="agenda">
+        <div class="header">
+            <button id="prev-button">
+                <i class="fa-solid fa-chevron-left"><</i>
+            </button>
+            <div class="month-year" id="month-year"></div>
+            <button id="next-button">
+                <i class="fa-solid fa-chevron-right">></i>
+            </button>
+        </div>
+        <div class="days">
+            <div class="day">Ma</div>
+            <div class="day">Di</div>
+            <div class="day">Wo</div>
+            <div class="day">Do</div>
+            <div class="day">Vr</div>
+            <div class="day">Za</div>
+            <div class="day">Zo</div>
+        </div>
+        <div class="data" id="data"></div>
+    </div>
+
+    <div class="selected-date">
+        <p class="selected-date-field"></p>
+        <button class="button" type="submit">Reserveer!</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
